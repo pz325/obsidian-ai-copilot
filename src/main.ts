@@ -1,21 +1,30 @@
 import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
-import { SampleModal } from 'modals';
-import { AICopilotSettingTab } from 'settings';
+import { SampleModal } from 'src/modals';
+import { AICopilotSettingTab } from 'src/settings';
 
 // Remember to rename these classes and interfaces!
 
-interface AICopilotSettings {
-	base_url: string,
+export interface AICopilotSettings {
+	baseUrl: string,
+	apiKey: string,
 	model: string
 }
 
-const DEFAULT_SETTINGS: AICopilotSettings = {
-	base_url: 'Http://localhost:11434',  // ollama default base_url
+const OLLAMA_SETTINGS: AICopilotSettings = {
+	baseUrl: 'http://localhost:11434/v1',  // ollama base_url
+	apiKey: "ollama",
 	model: "llama3.1:8b"
 }
 
+const OPENROUTER_SETTINGS: AICopilotSettings = {
+	baseUrl: "https://openrouter.ai/api/v1", // openrouter base_url
+	apiKey: "your openrouter api key",
+	model: "llama3.1:8b"
+}
 
-export default class AICopilot extends Plugin {
+const DEFAULT_SETTINGS: AICopilotSettings = OLLAMA_SETTINGS;
+
+export default class AICopilotPlugin extends Plugin {
 	settings: AICopilotSettings;
 
 	async onload() {
