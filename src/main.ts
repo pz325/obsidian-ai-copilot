@@ -10,13 +10,13 @@ export interface AICopilotSettings {
 	model: string
 }
 
-const OLLAMA_SETTINGS: AICopilotSettings = {
+export const OLLAMA_SETTINGS: AICopilotSettings = {
 	baseUrl: 'http://localhost:11434/v1',  // ollama base_url
 	apiKey: "ollama",
 	model: "llama3.1:8b"
 }
 
-const OPENROUTER_SETTINGS: AICopilotSettings = {
+export const OPENROUTER_SETTINGS: AICopilotSettings = {
 	baseUrl: "https://openrouter.ai/api/v1", // openrouter base_url
 	apiKey: "your openrouter api key",
 	model: "llama3.1:8b"

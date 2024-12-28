@@ -1,4 +1,3 @@
-import { Notice } from "obsidian"
 import { OpenAI } from "openai"
 
 export class AICopilot {
@@ -19,27 +18,15 @@ export class AICopilot {
 
     // call LLM to translate the given snippets
     translate = async(snippets: string) => {
-        const prompt = "Translate the following snippets into English:\n\n" + snippets;
-        const messages = [{ role: "system", content: "You are a helpful assistant." },
-            {"role": "user", "content" : prompt}];
+        const messages = [
+            { role: "system", content: "You are to translate the input to English." },
+            {"role": "user", "content" : snippets}];
         
-        try {
-            const response = await this.client.chat.completions.create({
-                model: this.model,
-                messages: messages,
-            });
-            
-            return response.choices[0].message.content;
-        } catch (error) {
-            this.display_error(error);
-        }
+        const response = await this.client.chat.completions.create({
+            model: this.model,
+            messages: messages,
+        });
+        
+        return response.choices[0].message.content;
     };
-
-    display_error = (err: any) => {
-		if (err instanceof OpenAI.APIError) {
-			new Notice(`## AICopilot Error: ${err}.`);
-		} else {
-			new Notice(err);
-		}
-	};
-}
+};
