@@ -1,6 +1,7 @@
 import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
 import { SampleModal } from 'src/modals';
 import { AICopilotSettingTab } from 'src/settings';
+import { AICopilot } from 'src/aicopilot';
 
 // Remember to rename these classes and interfaces!
 
@@ -26,9 +27,20 @@ const DEFAULT_SETTINGS: AICopilotSettings = OLLAMA_SETTINGS;
 
 export default class AICopilotPlugin extends Plugin {
 	settings: AICopilotSettings;
+	aipilot: AICopilot;
+
+	setup_aipilot() {
+		this.aipilot = new AICopilot(
+			this.settings.baseUrl,
+			this.settings.apiKey,
+			this.settings.model);
+	};
 
 	async onload() {
 		await this.loadSettings();
+		
+		// setup aipilot
+		this.setup_aipilot();
 
 		// This creates an icon in the left ribbon.
 		const ribbonIconEl = this.addRibbonIcon('dice', 'Sample Plugin', (evt: MouseEvent) => {
@@ -41,6 +53,23 @@ export default class AICopilotPlugin extends Plugin {
 		// This adds a status bar item to the bottom of the app. Does not work on mobile apps.
 		const statusBarItemEl = this.addStatusBarItem();
 		statusBarItemEl.setText('Status Bar Text');
+
+		// ADD commands
+		// add inline translate command
+		this.addCommand({
+			id: 'translate-selection',
+			name: 'Translate Selection',
+			editorCallback: (editor: Editor, view: MarkdownView) => {				
+				const selection = editor.getSelection().toString().trim();
+				const selection_right = editor.getCursor("to")
+				console.log(selection);
+				this.aipilot.translate(selection).then((res) => {
+					console.log(res);
+					console.log(selection_right);
+					editor.replaceRange("\n" + res + "\n", selection_right);
+				});
+			}
+		});
 
 		// This adds a simple command that can be triggered anywhere
 		this.addCommand({

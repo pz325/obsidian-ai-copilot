@@ -12,7 +12,8 @@ export class AICopilot {
         this.model = model;
         this.client = new OpenAI({
             baseURL: this.baseUrl,
-            apiKey: this.apiKey
+            apiKey: this.apiKey,
+            dangerouslyAllowBrowser: true
         });
     }
 

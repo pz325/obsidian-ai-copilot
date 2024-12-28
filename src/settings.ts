@@ -26,6 +26,7 @@ export class AICopilotSettingTab extends PluginSettingTab
 				.onChange(async (value) => {
 					this.plugin.settings.baseUrl = value;
 					await this.plugin.saveSettings();
+					this.plugin.setup_aipilot();
 				}));
 		
 		new Setting(containerEl)
@@ -37,6 +38,7 @@ export class AICopilotSettingTab extends PluginSettingTab
 				.onChange(async (value) => {
 					this.plugin.settings.apiKey = value;
 					await this.plugin.saveSettings();
+					this.plugin.setup_aipilot();
 				}));
 				
 		new Setting(containerEl)
@@ -48,6 +50,7 @@ export class AICopilotSettingTab extends PluginSettingTab
 				.onChange(async (value) => {
 					this.plugin.settings.model = value;
 					await this.plugin.saveSettings();
+					this.plugin.setup_aipilot();
 				}));
 
 	}
